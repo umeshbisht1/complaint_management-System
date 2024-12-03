@@ -41,7 +41,7 @@ export function Complainform() {
       try {
         const session=await loginuser({Email,Password});
         console.log(session);
-        router.push("/profile");
+        router.push(`/submit/${session?.userId}/createcomplain`);
       } catch (error) {
         
       }

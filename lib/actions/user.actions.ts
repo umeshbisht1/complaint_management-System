@@ -2,6 +2,7 @@
 import { ID } from "node-appwrite";
 import { users, account, databases } from "../appwrite.config";
 import { ZodEnum } from "zod";
+import { Query } from "node-appwrite";
 
 declare interface createuserparams {
   username: string;
@@ -27,22 +28,28 @@ export const createUser = async (user: createuserparams) => {
     return error;
   }
 };
+//login user  using email and password
 export const loginuser = async (user1: loginuser) => {
   try {
-    const user = await users.get("123456789");
-    return user;
-  } catch (error) {
-    console.error(
-      "An error occurred while retrieving the user details:",
-      error
-    );
+    const user=await account.createEmailPasswordSession(user1.Email,user1.Password);
+    if(user)
+    {
+      console.log(user);
+      return user;
+      
+    }
+  } catch (error:any) {
+    console.log("error  creating email session ",error.message|| error);
+    
   }
 };
+//create complain  and further u ahve to add the ownerid dynamic
 export const createcompalin = async (complain: {
   problem: string;
   discription: string;
   location: string;
   department: string;
+  owner_id:string;
 }) => {
 
   try {
@@ -54,12 +61,11 @@ export const createcompalin = async (complain: {
       {
         problem: complain.problem,
         discription: complain.discription,
-        owner_id: "0987654321",
+        owner_id: complain.owner_id,
         department:complain.department,
         location: complain.location,
       }
     );
-// 123456789
     console.log("Document Created:", result);
     return result;
   } catch (error:any) {
@@ -67,3 +73,32 @@ export const createcompalin = async (complain: {
     return error;
   }
 };
+//getuser based on id
+export const getuser=async (id:string)=>{
+  try {
+    const user=users.get(id);
+    console.log(user);
+    return user;
+  } catch (error) {
+    console.log("there is any error coming in getting user",error);
+    return null;
+    
+  }
+}
+//getdoucumnet
+export async function getComplaintsByUserId(id: string) {
+  try {
+    const databaseId = process.env.DATABASE_ID as string; // Your Appwrite database ID
+    const collectionId = process.env.COMPLAIN_ID as string; // Your collection ID
+
+    // Query documents where owner_id matches the user_id
+    const response = await databases.listDocuments(databaseId, collectionId,[
+      Query.equal('owner_id', id)
+  ]);
+
+    return response.documents; // List of complaints
+  } catch (error) {
+    console.error("Error fetching complaints:", error);
+    throw new Error("Failed to fetch complaints.");
+  }
+}

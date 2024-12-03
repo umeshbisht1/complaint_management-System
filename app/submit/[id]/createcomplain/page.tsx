@@ -1,5 +1,6 @@
 "use client";
-import React from "react";
+import React, { use } from "react";
+import { useState,useEffect } from "react";
 import Image from "next/image";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -16,6 +17,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { useRouter } from "next/router";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,6 +26,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 const depart = ["IT", "Hostel", "Fee cell", "Transport", "others"];
+import { getuser } from "@/lib/actions/user.actions";
 const formSchema = z.object({
   problem: z.string().min(10, {
     message: "problem must be at least 10 characters.",
@@ -40,7 +43,10 @@ const formSchema = z.object({
   }),
 });
 
-function Page() {
+
+function Page({ params }: { params: Promise<{ id: string }> }) { 
+ const {id}=use(params);
+  
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -53,16 +59,15 @@ function Page() {
 
   async function onSubmit({problem,discription,location,department}: z.infer<typeof formSchema>) {
    try {
-    const complaindata={problem,discription,location,department}
+    const complaindata={problem,discription,location,department,owner_id:id}
     const complain=await createcompalin(complaindata);
-    console.log(complain);
+    // console.log(complain);
     
    } catch (error) {
      console.log("error occured in creating complain",error);
      
    }
   }
-
   return (
     <div className="flex h-screen max-h-screen">
       <section className="remove-scrollbar container">
@@ -163,7 +168,7 @@ function Page() {
               </div>
             </form>
           </Form>
-          <Link href="/viewcomplain" className="text-green-500 text-center my-3">
+          <Link href={`/submit/${id}/profile`} className="text-green-500 text-center my-3">
            Checkout all the complain
           </Link>
           <p className="copyright py-12">© 2024 Complaint</p>
