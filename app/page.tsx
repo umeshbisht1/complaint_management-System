@@ -3,7 +3,8 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Complainform } from "@/components/forms/Complainform";
 
-export default function Home() {
+export default async function Home() {
+  
   return (
    
     <div className="flex h-screen max-h-screen">

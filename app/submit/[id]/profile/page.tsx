@@ -1,7 +1,6 @@
 import React from "react";
+import Link from "next/link";
 import { getuser, getComplaintsByUserId } from "@/lib/actions/user.actions";
-
-// Define the type for complaints
 type Complaint = {
   problem: string;
   description: string;
@@ -13,7 +12,6 @@ type Complaint = {
 };
 
 const Page = async ({ params }: { params: { id: string } }) => {
-  // Fetch the user and complaints data
   const { id } = await params;
   const user = await getuser(id);
   //console.log(user);
@@ -44,7 +42,9 @@ const Page = async ({ params }: { params: { id: string } }) => {
             <h1 className="text-2xl text-white font-bold">GEHU Dashboard</h1>
           </div>
           <button className="bg-red-400 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-all font-semibold shadow-md">
-            Logout
+          <Link href={`/submit/${id}/createcomplain`} >
+           Create_complain
+          </Link>
           </button>
         </div>
 

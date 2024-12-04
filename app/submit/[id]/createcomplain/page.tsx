@@ -61,7 +61,7 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
    try {
     const complaindata={problem,discription,location,department,owner_id:id}
     const complain=await createcompalin(complaindata);
-    // console.log(complain);
+    
     
    } catch (error) {
      console.log("error occured in creating complain",error);

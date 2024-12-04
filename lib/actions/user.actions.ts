@@ -17,14 +17,33 @@ declare interface loginuser {
 }
 export const createUser = async (user: createuserparams) => {
   try {
-    const result = await account.create(
-      user.ID,
-      user.Email,
-      user.Password,
-      user.username
+    // const result = await account.create(
+    //   user.ID,
+    //   user.Email,
+    //   user.Password,
+    //   user.username
+    // );
+    console.log(user);
+    
+    const user1 = await databases.createDocument(
+      process.env.DATABASE_ID as string, //database_id
+      process.env.USER_ID as string, // collectionId
+      ID.unique(), // documentId
+      {
+       Name:user.username,
+       Email:user.Email,
+       user_id:user.ID,
+       phoneno:user.phoneno,
+       role:"user",
+       Password:user.Password,
+      }
     );
-    return result;
+    console.log(user1);
+    
+    return user1;
   } catch (error: any) {
+    console.log(error.message);
+    
     return error;
   }
 };
@@ -77,7 +96,7 @@ export const createcompalin = async (complain: {
 export const getuser=async (id:string)=>{
   try {
     const user=users.get(id);
-    console.log(user);
+   
     return user;
   } catch (error) {
     console.log("there is any error coming in getting user",error);
