@@ -13,8 +13,9 @@ type Complaint = {
 
 const Page = async ({ params }: { params: { id: string } }) => {
   const { id } = await params;
+  
   const user = await getuser(id);
-  //console.log(user);
+  
 
   const complaints = await getComplaintsByUserId(id);
 
@@ -28,7 +29,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
 
   return (
     <div
-      className="min-h-screen bg-cover bg-center"
+      className="min-h-screen bg-cover bg-center text-white"
       style={{
         backgroundImage:
           "url('https://www.gehu.ac.in/assets/GEHU-BTL-b80ef66e.jpg')",

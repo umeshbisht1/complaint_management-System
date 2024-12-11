@@ -17,49 +17,63 @@ declare interface loginuser {
 }
 export const createUser = async (user: createuserparams) => {
   try {
-    // const result = await account.create(
-    //   user.ID,
-    //   user.Email,
-    //   user.Password,
-    //   user.username
-    // );
+    const result = await account.create(
+      user.ID,
+      user.Email,
+      user.Password,
+      user.username
+    );
     console.log(user);
-    
+
     const user1 = await databases.createDocument(
       process.env.DATABASE_ID as string, //database_id
       process.env.USER_ID as string, // collectionId
       ID.unique(), // documentId
       {
-       Name:user.username,
-       Email:user.Email,
-       user_id:user.ID,
-       phoneno:user.phoneno,
-       role:"user",
-       Password:user.Password,
+        Name: user.username,
+        Email: user.Email,
+        user_id: user.ID,
+        phoneno: user.phoneno,
+        role: "user",
+        Password: user.Password,
       }
     );
     console.log(user1);
-    
+  if(user1)
     return user1;
+  else
+  return null;
   } catch (error: any) {
     console.log(error.message);
-    
+
     return error;
   }
 };
 //login user  using email and password
 export const loginuser = async (user1: loginuser) => {
   try {
-    const user=await account.createEmailPasswordSession(user1.Email,user1.Password);
-    if(user)
-    {
-      console.log(user);
-      return user;
-      
+    const user = await account.createEmailPasswordSession(
+      user1.Email,
+      user1.Password
+    );
+    if (user) {
+      const databaseId = process.env.DATABASE_ID as string; // Your Appwrite database ID
+    const collectionId = process.env.USER_ID as string; // Your collection ID
+
+    const response = await databases.listDocuments(databaseId, collectionId, [
+      Query.equal("user_id", user.userId),
+    ]);
+      if(response.total>0)
+      {
+        console.log(response);
+        
+  return  response.documents[0];
+      }
+      return null;
     }
-  } catch (error:any) {
-    console.log("error  creating email session ",error.message|| error);
-    
+    return null;
+  } catch (error: any) {
+    console.log("error  creating email session ", error.message || error);
   }
 };
 //create complain  and further u ahve to add the ownerid dynamic
@@ -68,9 +82,8 @@ export const createcompalin = async (complain: {
   discription: string;
   location: string;
   department: string;
-  owner_id:string;
+  owner_id: string;
 }) => {
-
   try {
     console.log(complain);
     const result = await databases.createDocument(
@@ -81,29 +94,28 @@ export const createcompalin = async (complain: {
         problem: complain.problem,
         discription: complain.discription,
         owner_id: complain.owner_id,
-        department:complain.department,
+        department: complain.department,
         location: complain.location,
       }
     );
     console.log("Document Created:", result);
     return result;
-  } catch (error:any) {
+  } catch (error: any) {
     console.error("Error creating document:", error.message || error);
     return error;
   }
 };
 //getuser based on id
-export const getuser=async (id:string)=>{
+export const getuser = async (id: string) => {
   try {
-    const user=users.get(id);
-   
+    const user = users.get(id);
+
     return user;
   } catch (error) {
-    console.log("there is any error coming in getting user",error);
+    console.log("there is any error coming in getting user", error);
     return null;
-    
   }
-}
+};
 //getdoucumnet
 export async function getComplaintsByUserId(id: string) {
   try {
@@ -111,13 +123,87 @@ export async function getComplaintsByUserId(id: string) {
     const collectionId = process.env.COMPLAIN_ID as string; // Your collection ID
 
     // Query documents where owner_id matches the user_id
-    const response = await databases.listDocuments(databaseId, collectionId,[
-      Query.equal('owner_id', id)
-  ]);
+    const response = await databases.listDocuments(databaseId, collectionId, [
+      Query.equal("owner_id", id),
+    ]);
 
     return response.documents; // List of complaints
   } catch (error) {
     console.error("Error fetching complaints:", error);
     throw new Error("Failed to fetch complaints.");
+  }
+}
+declare interface changedata {
+  userId: string;
+  department: string;
+  role: string;
+}
+export const changeu = async (data: changedata) => {
+  try {
+    const databaseId = process.env.DATABASE_ID as string; // Your Appwrite database ID
+    const collectionId = process.env.USER_ID as string; // Your collection ID
+
+    const response = await databases.listDocuments(databaseId, collectionId, [
+      Query.equal("user_id", data.userId),
+    ]);
+
+    if (response.total > 0) {
+      const result = await databases.updateDocument(
+        databaseId,
+        collectionId,
+        response.documents[0].$id as string,
+        {
+          role: data.role,
+          department:data.department
+        }
+      );
+
+      return result;
+    }
+    return null;
+  } catch (error: any) {
+    console.error("Error fetching user:", error);
+    throw new Error("Failed to fetch user.");
+    return error.message;
+  }
+};
+declare interface created {
+  department: string;
+  
+}
+export const createdepart=async(data:created)=>{
+ try {
+  const databaseId = process.env.DATABASE_ID as string; // Your Appwrite database ID
+    const collectionId = process.env.DEPARTMENT_ID as string; // Your collection ID
+  const depart=await databases.createDocument(
+    databaseId as string,
+    collectionId as string,ID.unique(),{
+    departname:data.department
+    }
+  )
+  console.log(depart);
+  return depart;
+
+ } catch (error:any) {
+  console.log(error ||"error coccured during creating department");
+  return error.message
+  
+ }
+}
+export const getcomplaindepart=async(depart:string)=>{
+  try {
+    const databaseId = process.env.DATABASE_ID as string; // Your Appwrite database ID
+    const collectionId = process.env.COMPLAIN_ID as string; // Your collection ID
+
+    // Query documents where owner_id matches the user_id
+    const response = await databases.listDocuments(databaseId, collectionId, [
+      Query.equal("department", depart),
+    ]);
+if(response.total>0)
+    return response.documents;
+  else
+  return null; 
+  } catch (error) {
+    return null;
   }
 }

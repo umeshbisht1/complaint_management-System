@@ -16,36 +16,30 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import { createSecureServer } from "http2";
 import { useRouter } from "next/navigation";
-
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const formSchema = z.object({
-  username: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
+  username: z.string().min(5, {
+    message: "Username must be at least 5 characters.",
   }),
-  Password: z.string().min(6, {
-    message: "Password must be at least 6 characters.",
+  Password: z.string().min(8, {
+    message: "Password must be at least 8 characters.",
   }),
   Email: z.string().email("Enter a valid email."),
   ID: z.string().min(8, {
     message: "Enter your college id.",
   }),
   phoneno: z.string().min(10, {
-    message: "Phone no must be at least 10 numbers.",
+    message: "Phone number must be at least 10 digits.",
   }),
 });
 
-function Page() {
+function RegisterPage() {
   const router = useRouter();
-  const [isloading, setloading] = useState(false);
+  const [isLoading, setLoading] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -64,25 +58,26 @@ function Page() {
     ID,
     phoneno,
   }: z.infer<typeof formSchema>) {
-  
-    setloading(true);
+    setLoading(true);
     try {
       const userdata = { username, Password, Email, ID, phoneno };
-      console.log("umesh");
-      
       const user = await createUser(userdata);
-      console.log("umesh123");
-      
+
       if (user) {
-        console.log(user);
+        toast.success("Registration successful! Redirecting to login page...", {
+          autoClose: 3000,
+        });
+        setTimeout(() => router.push("/"), 3000);
       }
     } catch (error) {
-      console.log(error);
+      toast.error("An error occurred. Please try again.");
+    } finally {
+      setLoading(false);
     }
   }
 
   return (
-    <div className="flex h-screen max-h-screen">
+    <div className="flex h-screen max-h-screen text-white">
       <section className="remove-scrollbar container">
         <div className="sub-container flex-1 flex-col py-10 hidden w-[50%]">
           <Image
@@ -92,22 +87,21 @@ function Page() {
             alt="logo"
             className="mb-2 h-10 w-fit"
           />
-          <h1 className="header ">Hii there 👋</h1>
+          <h1 className="header ">Hi there 👋</h1>
           <p className=" mb-3 text-green-400">
-            Register with GEHU complain management system.
+            Register with GEHU Complaint Management System.
           </p>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-              <FormField
+            <FormField
                 control={form.control}
                 name="username"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Username</FormLabel>
                     <FormControl>
-                      <Input placeholder="xyzabc" {...field} />
+                      <Input placeholder="Enter the name" {...field} />
                     </FormControl>
-                    <FormDescription></FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -119,7 +113,7 @@ function Page() {
                   <FormItem>
                     <FormLabel>ID</FormLabel>
                     <FormControl>
-                      <Input placeholder="......." {...field} />
+                      <Input placeholder="........" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -145,7 +139,11 @@ function Page() {
                   <FormItem>
                     <FormLabel>Password</FormLabel>
                     <FormControl>
-                      <Input type="password" placeholder="xyzabc" {...field} />
+                      <Input
+                        type="password"
+                        placeholder="xyzabc"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -156,7 +154,7 @@ function Page() {
                 name="phoneno"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Phoneno</FormLabel>
+                    <FormLabel>Phone Number</FormLabel>
                     <FormControl>
                       <Input placeholder="1234567890" {...field} />
                     </FormControl>
@@ -165,8 +163,8 @@ function Page() {
                 )}
               />
               <div className="text-center">
-                <Button type="submit" className="border-[2px]">
-                  Submit
+                <Button type="submit" disabled={isLoading} className="border-[2px]">
+                  {isLoading ? "Registering..." : "Register"}
                 </Button>
               </div>
             </form>
@@ -188,4 +186,4 @@ function Page() {
   );
 }
 
-export default Page;
+export default RegisterPage;

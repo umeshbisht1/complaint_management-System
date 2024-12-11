@@ -1,13 +1,13 @@
+"use client"
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Complainform } from "@/components/forms/Complainform";
 
-export default async function Home() {
+export default  function Home() {
   
   return (
    
-    <div className="flex h-screen max-h-screen">
+    <div className="flex h-screen max-h-screen text-white">
       {/* {isAdmin && <PasskeyModal />} */}
 
       <section className="remove-scrollbar container my-auto">

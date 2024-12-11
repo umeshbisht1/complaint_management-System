@@ -1,5 +1,5 @@
 "use client"
-
+import { useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -27,6 +27,8 @@ const formSchema = z.object({
 
 export function Complainform() {
   const router=useRouter();
+  const [loading,setLoading]=useState(false);
+  const [error,seterror]=useState("");
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -38,13 +40,34 @@ export function Complainform() {
 
  
   async function onSubmit({Email,Password}: z.infer<typeof formSchema>) {
-      try {
+    setLoading(true);  
+    try {
         const session=await loginuser({Email,Password});
         console.log(session);
-        router.push(`/submit/${session?.userId}/createcomplain`);
-      } catch (error) {
-        
+        if(session)
+       { 
+        if(session?.role==="user")
+        {
+          router.push(`/submit/${session?.user_id}/createcomplain`);
+        }
+        else if(session?.role==="admin")
+        {
+          router.push(`/Admin/${session?.user_id}`);
+        }
+        else if("mid_admin"===session?.role)
+        {
+          router.push(`/midadmin/${session?.user_id}`);
+        }
+       else
+       seterror("failed in login")
+       }
+      else
+      seterror("failed in login")
+
+      } catch (error:any) {
+        seterror(error|| "failed in login");
       }
+      setLoading(false);
   }
   return (
     <Form {...form}>
@@ -82,6 +105,9 @@ export function Complainform() {
         )}
       />
       <div className="text-center"><Button  className="text-center mx-auto" type="submit">Submit</Button></div>
+      <button className="w-full text-red-400">
+        {error?error:""}
+      </button>
     </form>
   </Form>
   )

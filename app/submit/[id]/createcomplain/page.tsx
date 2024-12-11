@@ -1,6 +1,6 @@
 "use client";
-import React, { use } from "react";
-import { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import { use } from "react";
 import Image from "next/image";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -11,13 +11,11 @@ import { createcompalin } from "@/lib/actions/user.actions";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useRouter } from "next/router";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -25,28 +23,32 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
+
 const depart = ["IT", "Hostel", "Fee cell", "Transport", "others"];
-import { getuser } from "@/lib/actions/user.actions";
+
 const formSchema = z.object({
   problem: z.string().min(10, {
-    message: "problem must be at least 10 characters.",
+    message: "Problem must be at least 10 characters.",
   }),
   discription: z.string().min(10, {
-    message: "Password must be at least 10 characters.",
+    message: "Description must be at least 10 characters.",
   }),
-
   location: z.string().min(12, {
-    message: "Enter the  valid location",
+    message: "Enter a valid location.",
   }),
   department: z.enum(["IT", "Hostel", "Fee cell", "Transport", "others"], {
     message: "Select a valid department.",
   }),
 });
 
+function Page({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submissionStatus, setSubmissionStatus] = useState<{
+    success: boolean;
+    message: string;
+  } | null>(null);
 
-function Page({ params }: { params: Promise<{ id: string }> }) { 
- const {id}=use(params);
-  
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -57,19 +59,32 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
     },
   });
 
-  async function onSubmit({problem,discription,location,department}: z.infer<typeof formSchema>) {
-   try {
-    const complaindata={problem,discription,location,department,owner_id:id}
-    const complain=await createcompalin(complaindata);
-    
-    
-   } catch (error) {
-     console.log("error occured in creating complain",error);
-     
-   }
+  async function onSubmit({ problem, discription, location, department }: z.infer<typeof formSchema>) {
+    setIsSubmitting(true);
+    try {
+      const complaindata = { problem, discription, location, department, owner_id: id };
+      await createcompalin(complaindata);
+      setSubmissionStatus({ success: true, message: "Complaint registered successfully!" });
+    } catch (error) {
+      setIsSubmitting(false);
+      setSubmissionStatus({ success: false, message: "Error occurred in creating complaint." });
+    }
+    finally{
+      setIsSubmitting(false);
+    }
   }
+
+  useEffect(() => {
+    if (submissionStatus) {
+      const timeout = setTimeout(() => {
+        setSubmissionStatus(null);
+      }, 3000); // Message disappears after 3 seconds
+      return () => clearTimeout(timeout);
+    }
+  }, [submissionStatus]);
+
   return (
-    <div className="flex h-screen max-h-screen">
+    <div className="flex h-screen max-h-screen text-white">
       <section className="remove-scrollbar container">
         <div className="sub-container w-[50%] flex-col py-10 hidden">
           <Image
@@ -79,11 +94,22 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
             alt="logo"
             className="mb-2 h-10 w-fit"
           />
-          <h1 className="header ">Hii there 👋</h1>
-          <p className=" mb-3 text-green-400">Submit the complain.</p>
+          <h1 className="header">Hi there 👋</h1>
+          <p className="mb-3 text-green-400">Submit the complaint.</p>
+
+          {submissionStatus && (
+            <div
+              className={`text-center p-3 rounded-lg ${
+                submissionStatus.success ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
+              }`}
+            >
+              {submissionStatus.message}
+            </div>
+          )}
+
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            <FormField
+              <FormField
                 control={form.control}
                 name="department"
                 render={({ field }) => (
@@ -93,23 +119,21 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
                       <div className="w-full border-[2px] rounded-lg">
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
-                            <Button className="w-[100%]">
+                            <Button className="w-[100%] text-white">
                               {field.value.charAt(0).toUpperCase() +
                                 field.value.slice(1)}
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent className="w-full">
-                            {depart.map((item,index) => {
-                              return (
-                                <DropdownMenuItem
-                                  className="w-full cursor-pointer"
-                                  onClick={() => field.onChange(item)}
-                                  key={index}
-                                >
-                                  {item}
-                                </DropdownMenuItem>
-                              );
-                            })}
+                            {depart.map((item, index) => (
+                              <DropdownMenuItem
+                                className="w-full cursor-pointer text-white"
+                                onClick={() => field.onChange(item)}
+                                key={index}
+                              >
+                                {item}
+                              </DropdownMenuItem>
+                            ))}
                           </DropdownMenuContent>
                         </DropdownMenu>
                       </div>
@@ -127,7 +151,6 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
                     <FormControl>
                       <Input placeholder="Enter the problem Name" {...field} />
                     </FormControl>
-                    <FormDescription></FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -137,7 +160,7 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
                 name="discription"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Discription</FormLabel>
+                    <FormLabel>Description</FormLabel>
                     <FormControl>
                       <Input placeholder="......." {...field} />
                     </FormControl>
@@ -158,18 +181,18 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
                   </FormItem>
                 )}
               />
-
-              {/* Role Field */}
-
               <div className="text-center">
                 <Button type="submit" className="border-[2px]">
-                  Submit
+                {isSubmitting ? "Submitting..." : "Submit"}
                 </Button>
               </div>
             </form>
           </Form>
-          <Link href={`/submit/${id}/profile`} className="text-green-500 text-center my-3">
-           Checkout all the complain
+          <Link
+            href={`/submit/${id}/profile`}
+            className="text-green-500 text-center my-3"
+          >
+            Check out all the complaints
           </Link>
           <p className="copyright py-12">© 2024 Complaint</p>
         </div>
@@ -186,3 +209,4 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
 }
 
 export default Page;
+
