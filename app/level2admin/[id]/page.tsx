@@ -3,7 +3,7 @@ import React from "react";
 interface Complaint {
     id: string;
     problem: string;
-    description: string; // ✅ Fixed typo from 'discription'
+    discription: string; // ✅ Fixed typo from 'discription'
     owner_id: string;
     department: string;
     location: string;
@@ -27,7 +27,8 @@ async function page({ params }: { params: { id: string } }) {
 
     if (user) {
       complain = await getcomplaindepart(user.department); // Fetch complaints based on department
-
+    //  console.log(complain);
+     
       if (!complain || complain.length === 0) {
         // If complain is null or empty array, update the data message
         data = "No complaints found.";
@@ -69,7 +70,7 @@ async function page({ params }: { params: { id: string } }) {
               </h2>
               <p className="text-gray-600 mt-2">
                 <span className="font-semibold">Description:</span>{" "}
-                {complainItem.description}
+                {complainItem.discription}
               </p>
               <p className="text-gray-600 mt-2">
                 <span className="font-semibold">Location:</span>{" "}
