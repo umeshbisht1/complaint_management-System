@@ -26,9 +26,9 @@ export const createUser = async (user: createuserparams) => {
     console.log(user);
 
     const user1 = await databases.createDocument(
-      process.env.DATABASE_ID as string, //database_id
-      process.env.USER_ID as string, // collectionId
-      ID.unique(), // documentId
+      process.env.DATABASE_ID as string, 
+      process.env.USER_ID as string, 
+      ID.unique(),
       {
         Name: user.username,
         Email: user.Email,
@@ -203,6 +203,23 @@ if(response.total>0)
     return response.documents;
   else
   return null; 
+  } catch (error) {
+    return null;
+  }
+}
+export const getuserbyid=async(id:string)=>{
+  try {
+    const databaseId = process.env.DATABASE_ID as string; // Your Appwrite database ID
+  const collectionId = process.env.USER_ID as string; // Your collection ID
+
+  const response = await databases.listDocuments(databaseId, collectionId, [
+    Query.equal("user_id",id),
+  ]);
+  if(response.total>0)
+  {
+    return response.documents[0];
+  }
+  return null;
   } catch (error) {
     return null;
   }

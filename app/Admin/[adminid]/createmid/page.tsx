@@ -42,7 +42,7 @@ const AssignMidLevelAdmin = () => {
     },
   });
 
-  const departments = ["IT", "HR", "Finance", "Operations", "Sales"];
+  const departments = ["IT", "Hostel", "Transport", "Operations", "Sales"];
   const roles = ["admin", "mid_admin"]; // Role options
 
   const onSubmit = async ({ userId, department, role }: any) => {

@@ -95,7 +95,7 @@ export function Complainform() {
           <FormItem>
             <FormLabel>Password</FormLabel>
             <FormControl>
-              <Input placeholder="xyz@123" {...field} />
+              <Input placeholder="xyz@123" {...field}  type="Password"/>
             </FormControl>
             <FormDescription>
              Enter the password

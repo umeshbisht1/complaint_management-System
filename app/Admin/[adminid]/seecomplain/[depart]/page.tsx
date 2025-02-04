@@ -4,14 +4,20 @@ import { use } from 'react';
 
 async function page({ params }: { params: { depart: string } }) {
     const { depart } = await params;
+    let data="loading";
     let complain = null;
     try {
         complain = await getcomplaindepart(depart);
-        console.log(complain);
+        // console.log(complain);
+        if(!complain)
+            data="No Complain Found!!!!";
+
+
     } catch (error) {
         complain = null;
+        data="No Complain Found!!!!"
     }
-    console.log(depart);
+    //console.log(depart);
     return (
         <div className='min-h-screen bg-cover bg-center flex flex-col items-center  p-6 pb-10'
         style={{ backgroundImage: "url('https://www.gehu.ac.in/assets/GEHU-BTL-b80ef66e.jpg')" }}
@@ -62,7 +68,7 @@ async function page({ params }: { params: { depart: string } }) {
                         </div>
                     ))
                 ) : (
-                    <div className='text-white text-xl'>Loading...</div>
+                    <div className='text-black text-xl'>{data}...</div>
                 )}
             </div>
         </div>

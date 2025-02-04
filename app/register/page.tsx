@@ -32,8 +32,13 @@ const formSchema = z.object({
   ID: z.string().min(8, {
     message: "Enter your college id.",
   }),
-  phoneno: z.string().min(10, {
-    message: "Phone number must be at least 10 digits.",
+  phoneno: z
+  .string()
+  .regex(/^\d+$/, {
+    message: "Phone number must contain only numeric digits.",
+  })
+  .length(10, {
+    message: "Phone number must be exactly 10 digits.",
   }),
 });
 
