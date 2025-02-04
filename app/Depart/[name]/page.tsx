@@ -2,34 +2,36 @@ import { getcomplaindepart } from "@/lib/actions/user.actions";
 import React from "react";
 
 interface Complaint {
-    id: string;
-    problem: string;
-    discription: string; 
-    owner_id: string;
-    department: string;
-    location: string;
-    status: "pending" | "resolved" | "in-progress"; 
-    createdAt: string;
-    updatedAt: string;
-    permissions: string[];
-    databaseId: string;
-    collectionId: string;
-  }
+  id: string;
+  problem: string;
+  discription: string;
+  owner_id: string;
+  department: string;
+  location: string;
+  status: "pending" | "resolved" | "in-progress";
+  createdAt: string;
+  updatedAt: string;
+  permissions: string[];
+  databaseId: string;
+  collectionId: string;
+}
 
 async function Page({ params }: { params: { name: string } }) {
-  const { name } = await params;
-  let data = "loading";
+  const { name } = params; // ✅ No need for `await`
+  
+  let data = "Loading...";
   let complain: Complaint[] | null = null;
 
   try {
-    complain = await getcomplaindepart(name);
+    const response = await getcomplaindepart(name);
+    complain = response as Complaint[]; // ✅ Cast response to Complaint[]
 
     if (!complain || complain.length === 0) {
-      data = "No Complaints Found!!!!";
+      data = "No Complaints Found!";
     }
   } catch (error) {
     console.error(error);
-    data = "No Complaints Found!!!!";
+    data = "Error fetching complaints!";
   }
 
   return (
@@ -45,38 +47,34 @@ async function Page({ params }: { params: { name: string } }) {
       </div>
       <div className="max-w-4xl mx-auto">
         {complain && complain.length > 0 ? (
-          complain.map((complainItem, index) => (
-            <div key={index} className="bg-white p-6 rounded-lg shadow-lg mb-6">
-              <h2 className="text-2xl font-bold text-gray-800">
-                {complainItem.problem}
-              </h2>
+          complain.map((complainItem) => (
+            <div key={complainItem.id} className="bg-white p-6 rounded-lg shadow-lg mb-6">
+              <h2 className="text-2xl font-bold text-gray-800">{complainItem.problem}</h2>
               <p className="text-gray-600 mt-2">
-                <span className="font-semibold">Description:</span>{" "}
-                {complainItem.discription}
+                <span className="font-semibold">Description:</span> {complainItem.discription}
               </p>
               <p className="text-gray-600 mt-2">
-                <span className="font-semibold">Location:</span>{" "}
-                {complainItem.location}
+                <span className="font-semibold">Location:</span> {complainItem.location}
               </p>
               <p className="text-gray-600 mt-2">
                 <span className="font-semibold">Status:</span>{" "}
                 <span
                   className={`${
                     complainItem.status === "pending"
-                      ? "bg-yellow-500 text-white"
-                      : "bg-green-500 text-white"
-                  } rounded-full px-3 py-1 text-sm font-semibold`}
+                      ? "bg-yellow-500"
+                      : complainItem.status === "resolved"
+                      ? "bg-green-500"
+                      : "bg-blue-500"
+                  } text-white rounded-full px-3 py-1 text-sm font-semibold`}
                 >
                   {complainItem.status}
                 </span>
               </p>
               <p className="text-gray-600 mt-2">
-                <span className="font-semibold">Owner ID:</span>{" "}
-                {complainItem.owner_id}
+                <span className="font-semibold">Owner ID:</span> {complainItem.owner_id}
               </p>
               <p className="text-gray-600 mt-2">
-                <span className="font-semibold">Department:</span>{" "}
-                {complainItem.department}
+                <span className="font-semibold">Department:</span> {complainItem.department}
               </p>
             </div>
           ))
