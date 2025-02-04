@@ -1,6 +1,6 @@
 import { getcomplaindepart } from '@/lib/actions/user.actions';
 import React from 'react';
-import { use } from 'react';
+
 
 async function page({ params }: { params: { depart: string } }) {
     const { depart } = await params;
@@ -16,6 +16,7 @@ async function page({ params }: { params: { depart: string } }) {
     } catch (error) {
         complain = null;
         data="No Complain Found!!!!"
+        return error;
     }
     //console.log(depart);
     return (

@@ -16,6 +16,7 @@ import {
     FormMessage,
   } from "@/components/ui/form"
   import { Input } from "@/components/ui/input"
+import { subscribe } from "diagnostics_channel"
 const formSchema = z.object({
   Email: z.string().min(10, {
     message: "Enter the valid Email.",
@@ -56,7 +57,7 @@ export function Complainform() {
         }
         else if("mid_admin"===session?.role)
         {
-          router.push(`/midadmin/${session?.user_id}`);
+          router.push(`/level2admin/${session?.user_id}`);
         }
        else
        seterror("failed in login")
@@ -64,9 +65,14 @@ export function Complainform() {
       else
       seterror("failed in login")
 
-      } catch (error:any) {
-        seterror(error|| "failed in login");
+      } catch (error) {
+        if (error instanceof Error) {
+          setError(error.message);
+        } else {
+          setError("An unknown error occurred");
+        }
       }
+      
       setLoading(false);
   }
   return (
@@ -104,7 +110,7 @@ export function Complainform() {
           </FormItem>
         )}
       />
-      <div className="text-center"><Button  className="text-center mx-auto" type="submit">Submit</Button></div>
+      <div className="text-center"><Button  className="text-center mx-auto" type="submit">{loading?"Loading":"Submit"}</Button></div>
       <button className="w-full text-red-400">
         {error?error:""}
       </button>

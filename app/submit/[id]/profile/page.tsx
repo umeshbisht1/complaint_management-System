@@ -1,15 +1,15 @@
 import React from "react";
 import Link from "next/link";
 import { getuser, getComplaintsByUserId } from "@/lib/actions/user.actions";
-type Complaint = {
-  problem: string;
-  description: string;
-  owner_id: string;
-  department: string;
-  location: string;
-  status: "pending" | "completed";
-  createdAt: string;
-};
+// type Complaint = {
+//   problem: string;
+//   description: string;
+//   owner_id: string;
+//   department: string;
+//   location: string;
+//   status: "pending" | "completed";
+//   createdAt: string;
+// };
 
 const Page = async ({ params }: { params: { id: string } }) => {
   const { id } = await params;

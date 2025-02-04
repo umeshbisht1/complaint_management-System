@@ -68,6 +68,8 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
     } catch (error) {
       setIsSubmitting(false);
       setSubmissionStatus({ success: false, message: "Error occurred in creating complaint." });
+      console.log(error);
+      
     }
     finally{
       setIsSubmitting(false);

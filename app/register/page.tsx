@@ -10,7 +10,6 @@ import { createUser } from "@/lib/actions/user.actions";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -76,6 +75,8 @@ function RegisterPage() {
       }
     } catch (error) {
       toast.error("An error occurred. Please try again.");
+      console.log(error);
+      
     } finally {
       setLoading(false);
     }

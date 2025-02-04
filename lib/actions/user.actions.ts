@@ -1,7 +1,7 @@
 "use server";
 import { ID } from "node-appwrite";
 import { users, account, databases } from "../appwrite.config";
-import { ZodEnum } from "zod";
+
 import { Query } from "node-appwrite";
 
 declare interface createuserparams {
@@ -17,12 +17,12 @@ declare interface loginuser {
 }
 export const createUser = async (user: createuserparams) => {
   try {
-    const result = await account.create(
-      user.ID,
-      user.Email,
-      user.Password,
-      user.username
-    );
+    // const result = await account.create(
+    //   user.ID,
+    //   user.Email,
+    //   user.Password,
+    //   user.username
+    // );
     console.log(user);
 
     const user1 = await databases.createDocument(
@@ -43,8 +43,8 @@ export const createUser = async (user: createuserparams) => {
     return user1;
   else
   return null;
-  } catch (error: any) {
-    console.log(error.message);
+  } catch (error) {
+    console.log(error);
 
     return error;
   }
@@ -72,8 +72,8 @@ export const loginuser = async (user1: loginuser) => {
       return null;
     }
     return null;
-  } catch (error: any) {
-    console.log("error  creating email session ", error.message || error);
+  } catch (error) {
+    console.log("error  creating email session ", error);
   }
 };
 //create complain  and further u ahve to add the ownerid dynamic
@@ -100,8 +100,8 @@ export const createcompalin = async (complain: {
     );
     console.log("Document Created:", result);
     return result;
-  } catch (error: any) {
-    console.error("Error creating document:", error.message || error);
+  } catch (error) {
+    console.error("Error creating document:", error);
     return error;
   }
 };
@@ -161,10 +161,10 @@ export const changeu = async (data: changedata) => {
       return result;
     }
     return null;
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error fetching user:", error);
     throw new Error("Failed to fetch user.");
-    return error.message;
+    
   }
 };
 declare interface created {
@@ -184,9 +184,9 @@ export const createdepart=async(data:created)=>{
   console.log(depart);
   return depart;
 
- } catch (error:any) {
+ } catch (error) {
   console.log(error ||"error coccured during creating department");
-  return error.message
+  return error;
   
  }
 }
@@ -204,6 +204,8 @@ if(response.total>0)
   else
   return null; 
   } catch (error) {
+    console.log(error);
+    
     return null;
   }
 }
@@ -211,16 +213,19 @@ export const getuserbyid=async(id:string)=>{
   try {
     const databaseId = process.env.DATABASE_ID as string; // Your Appwrite database ID
   const collectionId = process.env.USER_ID as string; // Your collection ID
-
+  
   const response = await databases.listDocuments(databaseId, collectionId, [
     Query.equal("user_id",id),
   ]);
   if(response.total>0)
   {
+   
     return response.documents[0];
   }
   return null;
   } catch (error) {
+    console.log(error);
+    
     return null;
   }
 }
