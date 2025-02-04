@@ -3,14 +3,10 @@ import Link from "next/link";
 
 const departments:string[] = ["IT", "Hostel", "Fee Cell", "Transport", "Others"];
 
-interface PageProps {
-  params: {
-    adminid: string;
-  };
-}
 
-export default function AdminDashboard({ params }: PageProps) {
-  const { adminid } = params;
+
+export default function AdminDashboard() {
+  
 
   return (
     <div
@@ -35,7 +31,7 @@ export default function AdminDashboard({ params }: PageProps) {
         {departments.map((dept:string) => (
           <Link
             key={dept}
-            href={`/Admin/${adminid}/seecomplain/${dept}`}
+            href={`Depart/${dept}`}
             className="text-center w-[200px] p-5 bg-white rounded-lg shadow-md transition-transform hover:scale-105"
           >
             <div className="text-gray-800 font-bold text-lg">{dept}</div>

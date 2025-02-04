@@ -16,13 +16,13 @@ interface Complaint {
     collectionId: string;
   }
 
-async function Page({ params }: { params: { depart: string } }) {
-  const { depart } = params;
+async function Page({ params }: { params: { name: string } }) {
+  const { name } = await params;
   let data = "loading";
   let complain: Complaint[] | null = null;
 
   try {
-    complain = await getcomplaindepart(depart);
+    complain = await getcomplaindepart(name);
 
     if (!complain || complain.length === 0) {
       data = "No Complaints Found!!!!";
