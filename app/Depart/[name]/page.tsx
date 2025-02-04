@@ -15,17 +15,16 @@ interface Complaint {
   databaseId: string;
   collectionId: string;
 }
-
-async function Page() {
- 
+type Params = Promise<{ name: string }>
+async function Page({ params }: { params: Params }) {
+    const { name } = await params;
+    
   
   let data = "Loading...";
-  let complain: Complaint[] | null = null;
+  let complain: Complaint[]=[];
 
   try {
-    const response = await getcomplaindepart('Hostel');
-    complain = response as Complaint[]; 
-
+    complain = await getcomplaindepart(name);
     if (!complain || complain.length === 0) {
       data = "No Complaints Found!";
     }

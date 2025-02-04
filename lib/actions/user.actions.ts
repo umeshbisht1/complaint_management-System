@@ -202,11 +202,11 @@ export const getcomplaindepart=async(depart:string)=>{
 if(response.total>0)
     return response.documents;
   else
-  return null; 
+  return []; 
   } catch (error) {
     console.log(error);
     
-    return null;
+    return [];
   }
 }
 export const getuserbyid=async(id:string)=>{
@@ -222,10 +222,10 @@ export const getuserbyid=async(id:string)=>{
    
     return response.documents[0];
   }
-  return null;
+  return [];
   } catch (error) {
     console.log(error);
     
-    return null;
+    return [];
   }
 }
