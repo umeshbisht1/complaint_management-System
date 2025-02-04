@@ -16,15 +16,15 @@ interface Complaint {
   collectionId: string;
 }
 
-async function Page({ params }: { params: { name: string } }) {
-  const { name } = params; // ✅ No need for `await`
+async function Page() {
+ 
   
   let data = "Loading...";
   let complain: Complaint[] | null = null;
 
   try {
-    const response = await getcomplaindepart(name);
-    complain = response as Complaint[]; // ✅ Cast response to Complaint[]
+    const response = await getcomplaindepart('Hostel');
+    complain = response as Complaint[]; 
 
     if (!complain || complain.length === 0) {
       data = "No Complaints Found!";
