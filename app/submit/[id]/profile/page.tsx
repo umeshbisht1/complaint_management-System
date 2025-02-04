@@ -10,8 +10,8 @@ import { getuser, getComplaintsByUserId } from "@/lib/actions/user.actions";
 //   status: "pending" | "completed";
 //   createdAt: string;
 // };
-
-const Page = async ({ params }: { params: { id: string } }) => {
+type Params = Promise<{ id: string }>
+const Page = async ({ params }: { params: Params }) => {
   const { id } = await params;
   
   const user = await getuser(id);
