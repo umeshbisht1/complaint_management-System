@@ -1,32 +1,50 @@
 import { getcomplaindepart, getuserbyid } from "@/lib/actions/user.actions";
 import React from "react";
-
+interface Complaint {
+    id: string;
+    problem: string;
+    description: string; // ✅ Fixed typo from 'discription'
+    owner_id: string;
+    department: string;
+    location: string;
+    status: "pending" | "resolved" | "in-progress"; // Enum for better handling
+    createdAt: string;
+    updatedAt: string;
+    permissions: string[];
+    databaseId: string;
+    collectionId: string;
+  }
+  
 async function page({ params }: { params: { id: string } }) {
   const { id } = await params;
   console.log(id);
   
   let data = "loading";
+  let complain: Complaint[] | null = null; // Initialize with null, which is more accurate
 
-  let complain: any = [];
   try {
-    
-    const user: any = await getuserbyid("22610525");
+    const user = await getuserbyid(id); // Fetch user using the id parameter
 
     if (user) {
-      complain = await getcomplaindepart(user.department);
-      if (!complain) {
-        data = "Complain not found";
+      complain = await getcomplaindepart(user.department); // Fetch complaints based on department
+
+      if (!complain || complain.length === 0) {
+        // If complain is null or empty array, update the data message
+        data = "No complaints found.";
+        complain = []; // Optionally, set it to an empty array to prevent rendering issues
       }
+    } else {
+      data = "User not found";
     }
-    data = "Complain not found!!!";
   } catch (error) {
-    data = "Complain not found";
+    data = "Error retrieving complaints.";
     console.log(error);
+    complain = []; // Set to empty array in case of error to prevent rendering issues
   }
-  const accept: any = async () => {
+  const accept = async () => {
     alert("complain accepted ");
   };
-  const reject: any = async () => {
+  const reject= async () => {
     alert("complain resolved");
   };
 

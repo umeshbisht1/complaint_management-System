@@ -1,12 +1,10 @@
-"use client"
+"use client";
 import Image from "next/image";
 import Link from "next/link";
 import { Complainform } from "@/components/forms/Complainform";
 
-export default  function Home() {
-  
+export default function Home() {
   return (
-   
     <div className="flex h-screen max-h-screen text-white">
       {/* {isAdmin && <PasskeyModal />} */}
 
@@ -19,14 +17,14 @@ export default  function Home() {
             alt="patient"
             className="mb-12 h-10 w-fit"
           />
-           <section className="mb-12 space-y-4">
-          <h1 className="header">Hi there 👋</h1>
-          <p className="text-green-700">Get started with Complaints.</p>
-        </section>
-         <Complainform></Complainform>
-         <Link href="/register" className="text-red-500 text-center my-4">
-             Don't have account
-            </Link>
+          <section className="mb-12 space-y-4">
+            <h1 className="header">Hi there 👋</h1>
+            <p className="text-green-700">Get started with Complaints.&apos;</p>
+          </section>
+          <Complainform />
+          <Link href="/register" className="text-red-500 text-center my-4">
+            Don&apos;t have an account?
+          </Link>
           <div className="text-14-regular mt-20 flex justify-between">
             <p className="justify-items-end text-dark-600 xl:text-left">
               © 2024 Complaint

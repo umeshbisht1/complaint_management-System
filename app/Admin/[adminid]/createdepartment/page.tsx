@@ -35,7 +35,7 @@ const AssignMidLevelAdmin = () => {
   });
 
 
-  const onSubmit = async ({  department }: any) => {
+  const onSubmit = async ({  department }: {department:string}) => {
     setLoading(true);
     try {
       const changedata = { department};
@@ -43,8 +43,8 @@ const AssignMidLevelAdmin = () => {
      if(depart)  
       {setToastMessage("Department created successfully");}
       setShowToast(true);
-    } catch (error: any) {
-      setToastMessage(error?.message || "Department not created successfully");
+    } catch (error) {
+      setToastMessage("Department is not created successfully");
       setShowToast(true);
     }
     setLoading(false);

@@ -16,7 +16,7 @@ import {
     FormMessage,
   } from "@/components/ui/form"
   import { Input } from "@/components/ui/input"
-import { subscribe } from "diagnostics_channel"
+
 const formSchema = z.object({
   Email: z.string().min(10, {
     message: "Enter the valid Email.",
@@ -67,9 +67,9 @@ export function Complainform() {
 
       } catch (error) {
         if (error instanceof Error) {
-          setError(error.message);
+          seterror(error.message);
         } else {
-          setError("An unknown error occurred");
+          seterror("An unknown error occurred");
         }
       }
       

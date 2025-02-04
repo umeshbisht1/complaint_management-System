@@ -45,7 +45,7 @@ const AssignMidLevelAdmin = () => {
   const departments = ["IT", "Hostel", "Transport", "Operations", "Sales"];
   const roles = ["admin", "mid_admin"]; // Role options
 
-  const onSubmit = async ({ userId, department, role }: any) => {
+  const onSubmit = async ({ userId, department, role }: {userId:string, department:string, role:string}) => {
     try {
       const changedata = { userId, department, role };
       const changeuser = await changeu(changedata);
@@ -53,8 +53,8 @@ const AssignMidLevelAdmin = () => {
         setToastMessage("User role updated successfully!");
       } else setToastMessage("user not assigned successfully");
       setShowToast(true);
-    } catch (error: any) {
-      setToastMessage(error?.message || "user not assigned successfully");
+    } catch (error) {
+      setToastMessage("user not assigned successfully");
       setShowToast(true);
     }
     setTimeout(() => setShowToast(false), 3000);
