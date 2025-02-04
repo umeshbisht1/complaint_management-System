@@ -44,7 +44,11 @@ const AssignMidLevelAdmin = () => {
       {setToastMessage("Department created successfully");}
       setShowToast(true);
     } catch (error) {
-      setToastMessage("Department is not created successfully");
+      if (error instanceof Error) {
+        setToastMessage(error.message);
+      } else {
+        setToastMessage("An unknown error occurred");
+      }
       setShowToast(true);
     }
     setLoading(false);

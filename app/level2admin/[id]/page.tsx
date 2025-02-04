@@ -41,12 +41,12 @@ async function page({ params }: { params: { id: string } }) {
     console.log(error);
     complain = []; // Set to empty array in case of error to prevent rendering issues
   }
-  const accept = async () => {
-    alert("complain accepted ");
-  };
-  const reject= async () => {
-    alert("complain resolved");
-  };
+//   const accept = async () => {
+//     alert("complain accepted ");
+//   };
+//   const reject= async () => {
+//     alert("complain resolved");
+//   };
 
   return (
     <div
@@ -62,14 +62,14 @@ async function page({ params }: { params: { id: string } }) {
       </div>
       <div className="max-w-4xl mx-auto">
         {complain ? (
-          complain.map((complainItem: any, index: any) => (
-            <div key={index} className="bg-white p-6 rounded-lg shadow-lg mb-6">
+          complain.map((complainItem: Complaint) => (
+            <div key={complainItem.createdAt} className="bg-white p-6 rounded-lg shadow-lg mb-6">
               <h2 className="text-2xl font-bold text-gray-800">
                 {complainItem.problem}
               </h2>
               <p className="text-gray-600 mt-2">
                 <span className="font-semibold">Description:</span>{" "}
-                {complainItem.discription}
+                {complainItem.description}
               </p>
               <p className="text-gray-600 mt-2">
                 <span className="font-semibold">Location:</span>{" "}

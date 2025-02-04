@@ -54,7 +54,13 @@ const AssignMidLevelAdmin = () => {
       } else setToastMessage("user not assigned successfully");
       setShowToast(true);
     } catch (error) {
-      setToastMessage("user not assigned successfully");
+      // setToastMessage("user not assigned successfully");
+      // setShowToast(true);
+      if (error instanceof Error) {
+        setToastMessage(error.message);
+      } else {
+        setToastMessage("An unknown error occurred");
+      }
       setShowToast(true);
     }
     setTimeout(() => setShowToast(false), 3000);
