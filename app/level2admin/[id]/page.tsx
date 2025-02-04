@@ -14,8 +14,9 @@ interface Complaint {
     databaseId: string;
     collectionId: string;
   }
+  type Params = Promise<{ id: string }>
   
-async function page({ params }: { params: { id: string } }) {
+async function page({ params }: { params: Params }) {
   const { id } = await params;
   console.log(id);
   
