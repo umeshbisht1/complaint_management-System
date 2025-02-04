@@ -9,29 +9,43 @@ const departments = [
   'Others'
 ];
 
-export default async function AdminDashboard({ params }: { params: { adminid: string } }) {
-    const {adminid}=await params;
+interface PageProps {
+  params: {
+    adminid: string;
+  };
+}
+
+export default async function AdminDashboard({ params }: PageProps) {
+  const { adminid } = params;
+
   return (
-    <div className="min-h-screen bg-cover bg-center flex flex-col items-center  p-6 pb-10"
-    style={{ backgroundImage: "url('https://www.gehu.ac.in/assets/GEHU-BTL-b80ef66e.jpg')" }}>
-      <h1  className="text-white mb-[30px]" style={{
-        textAlign: 'center',
-        color: '#dadada',
-        marginBottom: '30px',
-        fontSize: '2.5rem'
-      }}>
+    <div 
+      className="min-h-screen bg-cover bg-center flex flex-col items-center p-6 pb-10"
+      style={{ backgroundImage: "url('https://www.gehu.ac.in/assets/GEHU-BTL-b80ef66e.jpg')" }}
+    >
+      <h1 
+        className="text-white mb-[30px]" 
+        style={{
+          textAlign: 'center',
+          color: '#dadada',
+          marginBottom: '30px',
+          fontSize: '2.5rem'
+        }}
+      >
         Welcome Admin
       </h1>
-      
-      <div style={{
-        display: 'flex',
-        flexWrap: 'wrap',
-        justifyContent: 'center',
-        gap: '20px'
-      }}>
+
+      <div 
+        style={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          justifyContent: 'center',
+          gap: '20px'
+        }}
+      >
         {departments.map((dept) => (
-          <Link 
-            key={dept} 
+          <Link
+            key={dept}
             href={`/Admin/${adminid}/seecomplain/${dept}`}
             style={{
               textDecoration: 'none',
@@ -44,11 +58,13 @@ export default async function AdminDashboard({ params }: { params: { adminid: st
               transition: 'transform 0.3s ease',
             }}
           >
-            <div style={{
-              color: '#333',
-              fontWeight: 'bold',
-              fontSize: '1.2rem'
-            }}>
+            <div 
+              style={{
+                color: '#333',
+                fontWeight: 'bold',
+                fontSize: '1.2rem'
+              }}
+            >
               {dept}
             </div>
           </Link>
