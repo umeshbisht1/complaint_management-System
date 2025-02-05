@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { getuser, getComplaintsByUserId } from "@/lib/actions/user.actions";
+import {  getComplaintsByUserId, getuserbyid } from "@/lib/actions/user.actions";
 // type Complaint = {
 //   problem: string;
 //   description: string;
@@ -14,7 +14,7 @@ type Params = Promise<{ id: string }>
 const Page = async ({ params }: { params: Params }) => {
   const { id } = await params;
   
-  const user = await getuser(id);
+  const user = await getuserbyid(id);
   
 
   const complaints = await getComplaintsByUserId(id);
@@ -52,7 +52,7 @@ const Page = async ({ params }: { params: Params }) => {
         {/* Main Content Section */}
         <div className="flex flex-col items-center justify-center w-full text-center px-4 py-6 bg-[#ffffff70] bg-opacity-80 rounded-lg shadow-md max-w-4xl mx-auto mt-6">
           <h1 className="text-3xl font-bold text-gray-800">
-            Hello, user👋🏿👋🏿 {user?.name}
+            Hello, user👋🏿👋🏿 {user?.Name}
           </h1>
           <h1 className="text-3xl font-bold text-gray-800">ID.....{user?.$id}</h1>
 

@@ -52,25 +52,25 @@ export const createUser = async (user: createuserparams) => {
 //login user  using email and password
 export const loginuser = async (user1: loginuser) => {
   try {
-    const user = await account.createEmailPasswordSession(
-      user1.Email,
-      user1.Password
-    );
-    if (user) {
+    // const user = await account.createEmailPasswordSession(
+    //   user1.Email,
+    //   user1.Password
+    // );
+    // if (user) {
       const databaseId = process.env.DATABASE_ID as string; // Your Appwrite database ID
     const collectionId = process.env.USER_ID as string; // Your collection ID
 
     const response = await databases.listDocuments(databaseId, collectionId, [
-      Query.equal("user_id", user.userId),
+      Query.equal("Email", user1.Email),
+      Query.equal("Password", user1.Password),
     ]);
+    
       if(response.total>0)
       {
-        console.log(response);
-        
-  return  response.documents[0];
+       return  response.documents[0];
       }
       return null;
-    }
+    
     return null;
   } catch (error) {
     console.log("error  creating email session ", error);
