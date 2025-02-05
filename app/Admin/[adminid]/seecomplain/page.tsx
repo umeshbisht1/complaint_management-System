@@ -31,7 +31,7 @@ export default function AdminDashboard() {
         {departments.map((dept:string) => (
           <Link
             key={dept}
-            href={`Depart/${dept}`}
+            href={`/Depart/${dept}`}
             className="text-center w-[200px] p-5 bg-white rounded-lg shadow-md transition-transform hover:scale-105"
           >
             <div className="text-gray-800 font-bold text-lg">{dept}</div>
