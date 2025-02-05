@@ -25,7 +25,8 @@ async function page({ params }: { params: Params }) {
 
   try {
     const user = await getuserbyid(id); // Fetch user using the id parameter
-
+    console.log(user);
+    
     if (user) {
       complain = await getcomplaindepart(user.department); // Fetch complaints based on department
     //  console.log(complain);

@@ -190,25 +190,54 @@ export const createdepart=async(data:created)=>{
   
  }
 }
-export const getcomplaindepart=async(depart:string)=>{
-  try {
-    const databaseId = process.env.DATABASE_ID as string; // Your Appwrite database ID
-    const collectionId = process.env.COMPLAIN_ID as string; // Your collection ID
+interface Complaint {
+  id: string;
+  problem: string;
+  discription: string;
+  owner_id: string;
+  department: string;
+  location: string;
+  status: "pending" | "resolved" | "in-progress";
+  createdAt: string;
+  updatedAt: string;
+  permissions: string[];
+  databaseId: string;
+  collectionId: string;
+}
 
-    // Query documents where owner_id matches the user_id
+export const getcomplaindepart = async (depart: string): Promise<Complaint[]> => {
+  try {
+    const databaseId = process.env.DATABASE_ID as string;
+    const collectionId = process.env.COMPLAIN_ID as string;
+
+    // Fetch documents where "department" matches "depart"
     const response = await databases.listDocuments(databaseId, collectionId, [
       Query.equal("department", depart),
     ]);
-if(response.total>0)
-    return response.documents;
-  else
-  return []; 
+
+    if (response.total > 0) {
+      return response.documents.map((doc) => ({
+        id: doc.$id,
+        problem: doc.problem,
+        discription: doc.discription,
+        owner_id: doc.owner_id,
+        department: doc.department,
+        location: doc.location,
+        status: doc.status,
+        createdAt: doc.$createdAt,
+        updatedAt: doc.$updatedAt,
+        permissions: doc.$permissions || [],
+        databaseId: doc.$databaseId,
+        collectionId: doc.$collectionId,
+      }));
+    } else {
+      return [];
+    }
   } catch (error) {
-    console.log(error);
-    
+    console.error("Error fetching complaints:", error);
     return [];
   }
-}
+};
 export const getuserbyid=async(id:string)=>{
   try {
     const databaseId = process.env.DATABASE_ID as string; // Your Appwrite database ID
