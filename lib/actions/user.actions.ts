@@ -238,23 +238,53 @@ export const getcomplaindepart = async (depart: string): Promise<Complaint[]> =>
     return [];
   }
 };
-export const getuserbyid=async(id:string)=>{
-  try {
-    const databaseId = process.env.DATABASE_ID as string; // Your Appwrite database ID
-  const collectionId = process.env.USER_ID as string; // Your collection ID
-  
-  const response = await databases.listDocuments(databaseId, collectionId, [
-    Query.equal("user_id",id),
-  ]);
-  if(response.total>0)
-  {
-   
-    return response.documents[0];
-  }
-  return [];
-  } catch (error) {
-    console.log(error);
-    
-    return [];
-  }
+interface User {
+  Name: string;
+  Email: string;
+  user_id: string;
+  phoneno: string;
+  role: "mid_admin" | "admin" | "user" ; // Adjust roles as needed
+  Password: string;
+  department: string;
+  $id: string;
+  $createdAt: string;
+  $updatedAt: string;
+  $permissions: string[];
+  $databaseId: string;
+  $collectionId: string;
 }
+
+export const getuserbyid = async (id: string): Promise<User | null> => {
+  try {
+    const databaseId = process.env.DATABASE_ID as string;
+    const collectionId = process.env.USER_ID as string;
+
+    const response = await databases.listDocuments(databaseId, collectionId, [
+      Query.equal("user_id", id),
+    ]);
+
+    if (response.total > 0) {
+      const doc = response.documents[0];
+      return {
+        Name: doc.Name,
+        Email: doc.Email,
+        user_id: doc.user_id,
+        phoneno: doc.phoneno,
+        role: doc.role,
+        Password: doc.Password,
+        department: doc.department,
+        $id: doc.$id,
+        $createdAt: doc.$createdAt,
+        $updatedAt: doc.$updatedAt,
+        $permissions: doc.$permissions || [],
+        $databaseId: doc.$databaseId,
+        $collectionId: doc.$collectionId,
+      };
+    }
+
+    return null; // Return `null` instead of an empty array if no user is found
+  } catch (error) {
+    console.error("Error fetching user:", error);
+    return null; // Return `null` in case of an error
+  }
+};

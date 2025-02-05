@@ -14,6 +14,22 @@ interface Complaint {
     databaseId: string;
     collectionId: string;
   }
+  interface User {
+    Name: string;
+    Email: string;
+    user_id: string;
+    phoneno: string;
+    role: "mid_admin" | "admin" | "user" ; // Adjust roles as needed
+    Password: string;
+    department: string;
+    $id: string;
+    $createdAt: string;
+    $updatedAt: string;
+    $permissions: string[];
+    $databaseId: string;
+    $collectionId: string;
+  }
+  
   type Params = Promise<{ id: string }>
   
 async function page({ params }: { params: Params }) {
@@ -24,7 +40,7 @@ async function page({ params }: { params: Params }) {
   let complain: Complaint[] | null = null; // Initialize with null, which is more accurate
 
   try {
-    const user = await getuserbyid(id); // Fetch user using the id parameter
+    const user:User = await getuserbyid(id); // Fetch user using the id parameter
     console.log(user);
     
     if (user) {
