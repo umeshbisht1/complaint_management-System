@@ -1,6 +1,6 @@
 "use server";
 import { ID } from "node-appwrite";
-import { users, account, databases } from "../appwrite.config";
+import { users, databases } from "../appwrite.config";
 
 import { Query } from "node-appwrite";
 
