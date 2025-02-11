@@ -96,7 +96,7 @@ function Page({ params }: { params: Promise<{ id: string }> }) {
             alt="logo"
             className="mb-2 h-10 w-fit"
           />
-          <h1 className="header">Hi there 👋</h1>
+          <h1 className="header">GEHU Complaints Management System 👋</h1>
           <p className="mb-3 text-green-400">Submit the complaint.</p>
 
           {submissionStatus && (

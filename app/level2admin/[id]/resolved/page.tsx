@@ -4,7 +4,6 @@ import { chnagestatus, getcomplaindepart, getuserbyid } from "@/lib/actions/user
 import React, { useEffect, useState} from "react";
 import { useParams } from 'next/navigation'
 import Image from "next/image";
-import Link from "next/link";
 
 
 interface Complaint {
@@ -30,7 +29,7 @@ interface User {
 
 export default function Page() {
     const {id }= useParams<{ id:string; }>();
-   
+    //console.log(id);
     
     const [complaints, setComplaints] = useState<Complaint[] | null>(null);
     const [loading, setLoading] = useState(true);
@@ -40,7 +39,7 @@ export default function Page() {
             try {
                 const user: User = await getuserbyid(id);
                 if (user) {
-                    const fetchedComplaints = await getcomplaindepart(user.department, "pending");
+                    const fetchedComplaints = await getcomplaindepart(user.department, "resolved");
                     setComplaints(fetchedComplaints || []);
                 }
             } catch (error) {
@@ -50,20 +49,8 @@ export default function Page() {
             }
         };
         fetchComplaints();
-    }, [id,loading]);
+    }, [id]);
 
-    const handleAction = async (action: string, complaintId: string) => {
-        const check=await chnagestatus(action,complaintId);
-        if(check===true)
-           { console.log("status update sucessfully");
-              setLoading(true);
-           } 
-
-        else
-        alert("error occured here");
-            
-       
-    };
 
     return (
         <div className="min-h-screen bg-cover bg-center flex flex-col items-center p-6 pb-10"
@@ -80,13 +67,13 @@ export default function Page() {
                           alt="logo"
                           className="mb-2 h-10 w-fit"
                         />
-                <button className="bg-red-500 text-white px-4 py-2 rounded"><Link href={`${id}/change`}>Update Status</Link></button>
+                
             </div>
 
             <div className="text-center text-3xl font-semibold text-white mb-8">
                 <h1 className="text-red-800">Welcome Mid_Admin</h1>
                 <h3>Complaint Dashboard</h3>
-                <h4>Pending Complaints</h4>
+                <h4>Update The  Complaints Status</h4>
             </div>
 
             <div className="max-w-4xl mx-auto">
@@ -105,21 +92,20 @@ export default function Page() {
                             <p className="text-gray-600 mt-2">
                                 <span className="font-semibold">Status:</span> {complaint.status}
                             </p>
+                            <p className="text-gray-600 mt-2">
+                                <span className="font-bold ">updatedAt:</span> {complaint.updatedAt.slice(0,10)}
+                            </p>
 
-                            {complaint.status === "pending" && (
+                            
+                            {complaint.status === "resolved" && (
                                 <div className="mt-4">
                                     <button
-                                        className="bg-green-500 text-white px-4 py-2 rounded mr-2"
-                                        onClick={() => handleAction("accepted", complaint.id)}
+                                        className="bg-yellow-500 text-white px-4 py-2 rounded mr-2"
+                                       
                                     >
-                                        Accept
+                                       Resolved
                                     </button>
-                                    <button
-                                        className="bg-red-500 text-white px-4 py-2 rounded"
-                                        onClick={() => handleAction("rejected", complaint.id)}
-                                    >
-                                        Reject
-                                    </button>
+                                   
                                 </div>
                             )}
                         </div>

@@ -18,7 +18,7 @@ export default function Home() {
             className="mb-12 h-10 w-fit"
           />
           <section className="mb-12 space-y-4">
-            <h1 className="header">Hi there 👋</h1>
+            <h1 className="header">GEHU Complaint Management system 👋</h1>
             <p className="text-green-700">Get started with Complaints.&apos;</p>
           </section>
           <Complainform />
@@ -29,9 +29,9 @@ export default function Home() {
             <p className="justify-items-end text-dark-600 xl:text-left">
               © 2024 Complaint
             </p>
-            <Link href="/?admin=true" className="text-green-500">
+            {/* <Link href="/?admin=true" className="text-green-500">
               Admin
-            </Link>
+            </Link> */}
           </div>
         </div>
       </section>
@@ -40,7 +40,7 @@ export default function Home() {
         src="/assets/GEHU-BTL-b80ef66e.jpg"
         height={1000}
         width={1000}
-        alt="GEHHU"
+        alt="GEHU"
         className="side-img max-w-[50%]"
       />
     </div>

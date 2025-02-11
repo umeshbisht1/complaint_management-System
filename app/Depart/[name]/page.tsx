@@ -24,7 +24,7 @@ async function Page({ params }: { params: Params }) {
   let complain: Complaint[]=[];
 
   try {
-    complain = await getcomplaindepart(name);
+    complain = await getcomplaindepart(name,"in-progress");
     if (!complain || complain.length === 0) {
       data = "No Complaints Found!";
     }

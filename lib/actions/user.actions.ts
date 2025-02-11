@@ -109,7 +109,6 @@ export const createcompalin = async (complain: {
 export const getuser = async (id: string) => {
   try {
     const user = users.get(id);
-
     return user;
   } catch (error) {
     console.log("there is any error coming in getting user", error);
@@ -117,13 +116,14 @@ export const getuser = async (id: string) => {
   }
 };
 //getdoucumnet
-export async function getComplaintsByUserId(id: string) {
+export async function getComplaintsByUserId(id: string,status:string) {
   try {
-    const databaseId = process.env.DATABASE_ID as string; // Your Appwrite database ID
-    const collectionId = process.env.COMPLAIN_ID as string; // Your collection ID
+    const databaseId = process.env.DATABASE_ID as string;
+    const collectionId = process.env.COMPLAIN_ID as string; 
 
     // Query documents where owner_id matches the user_id
     const response = await databases.listDocuments(databaseId, collectionId, [
+      Query.equal("status", status),
       Query.equal("owner_id", id),
     ]);
 
@@ -205,7 +205,7 @@ interface Complaint {
   collectionId: string;
 }
 
-export const getcomplaindepart = async (depart: string): Promise<Complaint[]> => {
+export const getcomplaindepart = async (depart: string, p0: string): Promise<Complaint[]> => {
   try {
     const databaseId = process.env.DATABASE_ID as string;
     const collectionId = process.env.COMPLAIN_ID as string;
@@ -213,6 +213,7 @@ export const getcomplaindepart = async (depart: string): Promise<Complaint[]> =>
     // Fetch documents where "department" matches "depart"
     const response = await databases.listDocuments(databaseId, collectionId, [
       Query.equal("department", depart),
+      Query.equal("status", p0),
     ]);
 
     if (response.total > 0) {
@@ -288,3 +289,40 @@ export const getuserbyid = async (id: string): Promise<User | null> => {
     return null; // Return `null` in case of an error
   }
 };
+export const chnagestatus=async(action:string,id:string)=>{
+  const databaseId = process.env.DATABASE_ID as string;
+    const collectionId = process.env.COMPLAIN_ID as string;
+    try {
+      if(action==="rejected")
+      {
+        await databases.deleteDocument(
+          databaseId,
+          collectionId,
+          id
+      );
+      }
+      else if(action==="accepted")
+      {
+        await databases.updateDocument(
+         databaseId,
+         collectionId,
+         id,
+          { status: "in-progress" }
+      );
+      }
+      else
+      {
+        await databases.updateDocument(
+          databaseId,
+          collectionId,
+          id,
+           { status: "resolved" }
+       );
+      }
+      return true;
+    } catch (error) {
+      console.log(error);
+      return false;
+      
+    }
+}

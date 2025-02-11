@@ -17,14 +17,15 @@ const Page = async ({ params }: { params: Params }) => {
   const user = await getuserbyid(id);
   
 
-  const complaints = await getComplaintsByUserId(id);
+  const complaints = await getComplaintsByUserId(id,"in-progress");
+  console.log(complaints);
+  
 
-  // Separate complaints into pending and completed
   const pendingComplaints = complaints.filter(
-    (complaint) => complaint.status === "pending"
+    (complaint) => complaint.status === "in-progress"
   );
   const completedComplaints = complaints.filter(
-    (complaint) => complaint.status === "completed"
+    (complaint) => complaint.status === "resolved"
   );
 
   return (
@@ -54,7 +55,7 @@ const Page = async ({ params }: { params: Params }) => {
           <h1 className="text-3xl font-bold text-gray-800">
             Hello, user👋🏿👋🏿 {user?.Name}
           </h1>
-          <h1 className="text-3xl font-bold text-gray-800">ID.....{user?.$id}</h1>
+          <h1 className="text-3xl font-bold text-gray-800">ID.....{user?.user_id}</h1>
 
           <p className="text-lg mt-2 text-gray-600">
             Welcome to your complaint dashboard.
