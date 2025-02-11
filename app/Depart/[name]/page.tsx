@@ -75,6 +75,9 @@ async function Page({ params }: { params: Params }) {
               <p className="text-gray-600 mt-2">
                 <span className="font-semibold">Department:</span> {complainItem.department}
               </p>
+              <p className="text-gray-600 mt-2">
+                <span className="font-semibold">CreatedAt:</span> {complainItem.createdAt}
+              </p>
             </div>
           ))
         ) : (

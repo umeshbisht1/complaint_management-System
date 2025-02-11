@@ -98,6 +98,9 @@ const Page = async ({ params }: { params: Params }) => {
                       <p className="text-lg text-red-700 font-extrabold">
                         Status: {complaint.status}
                       </p>
+                      <p className="text-lg text-red-700 font-extrabold">
+                        createdAt: {complaint.$createdAt.slice(0,10)}
+                      </p>
                     </div>
                   ))}
                 </div>

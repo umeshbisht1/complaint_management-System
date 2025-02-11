@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 
-const departments:string[] = ["IT", "Hostel", "Fee Cell", "Transport", "Others"];
+const departments:string[] = ["IT", "Hostel", "Fee cell", "Transport", "Others"];
 
 
 
