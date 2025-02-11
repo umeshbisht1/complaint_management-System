@@ -1,6 +1,6 @@
 "use client"; 
 
-import { chnagestatus, getcomplaindepart, getuserbyid } from "@/lib/actions/user.actions";
+import { getcomplaindepart, getuserbyid } from "@/lib/actions/user.actions";
 import React, { useEffect, useState} from "react";
 import { useParams } from 'next/navigation'
 import Image from "next/image";

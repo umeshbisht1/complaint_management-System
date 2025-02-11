@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
-import {  getComplaintsByUserId, getuserbyid } from "@/lib/actions/user.actions";
+import Image from "next/image";
+import { getComplaintsByUserId, getuserbyid } from "@/lib/actions/user.actions";
 // type Complaint = {
 //   problem: string;
 //   description: string;
@@ -10,16 +11,14 @@ import {  getComplaintsByUserId, getuserbyid } from "@/lib/actions/user.actions"
 //   status: "pending" | "completed";
 //   createdAt: string;
 // };
-type Params = Promise<{ id: string }>
+type Params = Promise<{ id: string }>;
 const Page = async ({ params }: { params: Params }) => {
   const { id } = await params;
-  
-  const user = await getuserbyid(id);
-  
 
-  const complaints = await getComplaintsByUserId(id,"in-progress");
+  const user = await getuserbyid(id);
+
+  const complaints = await getComplaintsByUserId(id, "in-progress");
   console.log(complaints);
-  
 
   const pendingComplaints = complaints.filter(
     (complaint) => complaint.status === "in-progress"
@@ -40,13 +39,18 @@ const Page = async ({ params }: { params: Params }) => {
         {/* Top Section: Logo, GEHU Dashboard Text, and Logout Button */}
         <div className="w-full bg-black bg-opacity-60 py-4 px-6 flex justify-between items-center">
           <div className="flex items-center space-x-4">
-            <img src="/assets/download.jpg" alt="Logo" className="h-10" />
+            <Image
+              src="/assets/download.jpg"
+              height={1000}
+              width={1000}
+              alt="logo"
+              className="mb-2 h-10 w-fit"
+            />
+
             <h1 className="text-2xl text-white font-bold">GEHU Dashboard</h1>
           </div>
           <button className="bg-red-400 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-all font-semibold shadow-md">
-          <Link href={`/submit/${id}/createcomplain`} >
-           Create_complain
-          </Link>
+            <Link href={`/submit/${id}/createcomplain`}>Create_complain</Link>
           </button>
         </div>
 
@@ -55,7 +59,9 @@ const Page = async ({ params }: { params: Params }) => {
           <h1 className="text-3xl font-bold text-gray-800">
             Hello, user👋🏿👋🏿 {user?.Name}
           </h1>
-          <h1 className="text-3xl font-bold text-gray-800">ID.....{user?.user_id}</h1>
+          <h1 className="text-3xl font-bold text-gray-800">
+            ID.....{user?.user_id}
+          </h1>
 
           <p className="text-lg mt-2 text-gray-600">
             Welcome to your complaint dashboard.
