@@ -23,9 +23,9 @@ import {
 import { changeu } from "@/lib/actions/user.actions";
 
 const formSchema = z.object({
-  userId: z.string().min(1, { message: "User ID is required." }),
-  department: z.string().min(1, { message: "Please select a department." }),
-  role: z.string().min(1, { message: "Please select a role." }), // Role validation
+  userId: z.string().min(10, { message: "User ID is required." }),
+  department: z.string().min(10, { message: "Please select a department." }),
+  role: z.string().min(3, { message: "Please select a role." }), // Role validation
 });
 
 const AssignMidLevelAdmin = () => {
@@ -42,7 +42,7 @@ const AssignMidLevelAdmin = () => {
     },
   });
 
-  const departments = ["IT", "Hostel", "Transport", "Operations", "Sales"];
+  const departments = ["IT", "Hostel", "Fee cell", "Transport", "others"];
   const roles = ["admin", "mid_admin"]; // Role options
 
   const onSubmit = async ({ userId, department, role }: {userId:string, department:string, role:string}) => {
@@ -54,8 +54,6 @@ const AssignMidLevelAdmin = () => {
       } else setToastMessage("user not assigned successfully");
       setShowToast(true);
     } catch (error) {
-      // setToastMessage("user not assigned successfully");
-      // setShowToast(true);
       if (error instanceof Error) {
         setToastMessage(error.message);
       } else {

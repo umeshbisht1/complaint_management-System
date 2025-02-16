@@ -116,7 +116,7 @@ export default function Page() {
                                         className="bg-green-500 text-white px-4 py-2 rounded mr-2"
                                         onClick={() => handleAction("resolved", complaint.id)}
                                     >
-                                       In-progress
+                                      update status
                                     </button>
                                    
                                 </div>
